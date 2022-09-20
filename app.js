@@ -1,5 +1,16 @@
-const _ = require("lodash")
+let http = require("http");
+let fs = require("fs");
 
-const items = [1,[2,[3,[5]]]]
-const newItems = _.flattenDeep(items)
-console.log(newItems)
+http
+  .createServer((req,res)=>{
+    const fileStream = fs.createReadStream("./content/first.txt","utf8");
+    fileStream.on("open",()=>{
+        fileStream.pipe(res);
+
+    })
+    fileStream.on("error",(err)=>{
+        res.write(err);
+        res.end();
+    })
+  })
+  .listen(5000);
